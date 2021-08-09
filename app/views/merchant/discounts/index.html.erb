@@ -3,3 +3,4 @@
 <p>Percantage Discount: <%= number_to_percentage(discount.percentage_discount, precision: 1) %></p>
 <p>Quantity Threshold: <%= discount.quantity_threshold %></p>
 <% end %>
+<%= link_to 'Create New Discount', new_merchant_discount_path(@merchant) %>
