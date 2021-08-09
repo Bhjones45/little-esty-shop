@@ -1,4 +1,4 @@
-<h1><%= @merchant.name %>'s Discounts'</h1>
+<h1><%= @merchant.name %>'s Discounts</h1>
 <% @merchant.discounts.each do |discount| %>
 <p>Percantage Discount: <%= number_to_percentage(discount.percentage_discount, precision: 1) %></p>
 <p>Quantity Threshold: <%= discount.quantity_threshold %></p>
