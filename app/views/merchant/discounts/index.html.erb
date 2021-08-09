@@ -3,6 +3,7 @@
     <section id="discount-<%= discount.id %>">
     <p>Percantage Discount: <%= number_to_percentage(discount.percentage_discount, precision: 1) %></p>
     <p>Quantity Threshold: <%= discount.quantity_threshold %></p>
+    <%= link_to 'Discounts', merchant_discount_path(@merchant, discount) %>
     <%= link_to 'Delete Discount', merchant_discount_path(@merchant, discount), method: :delete %>
   </section>
 <% end %>
