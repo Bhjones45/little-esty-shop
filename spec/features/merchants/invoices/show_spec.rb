@@ -57,4 +57,19 @@ RSpec.describe 'Merchants invoices show page' do
       expect(current_path).to eq("/merchants/#{@merchant_1.id}/invoices/#{@invoices[0].id}")
     end
   end
+
+  describe 'discount functionality' do
+    it 'displays total discounted revenue from all items on invoice' do
+      merchant = create(:merchant)
+      customer = create(:customer)
+      invoice = create(:invoice, customer: customer)
+      item1 = create(:item, merchant: merchant)
+      item2 = create(:item, merchant: merchant)
+      invoice_item1 = create(:invoice_item, quantity: 10, item: item1, invoice: invoice, status: 1)
+      invoice_item1 = create(:invoice_item, quantity: 20, item: item2, invoice: invoice, status: 1)
+      discount = merchant.discounts.create!(quantity_threshold: 15, percentage_discount: 10)
+
+      expect(page).to have_content("Discounted revenue from invoice: $#{invoice.total_discounted_revenue}")
+    end
+  end
 end
