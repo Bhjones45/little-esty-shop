@@ -1,6 +1,7 @@
 class Merchant::DiscountsController < ApplicationController
   def index
     @merchant = Merchant.find(params[:merchant_id])
+    @holidays = DateSwaggerService.new.next_three_holidays
   end
 
   def new
