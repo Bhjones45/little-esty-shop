@@ -17,6 +17,10 @@ RSpec.describe 'Merchants dashboard index page' do
       expect(page).to have_link('My Invoices')
     end
 
+    it 'displays link to discounts' do
+      expect(page).to have_link('Discounts')
+    end
+    
     describe 'items ready to ship section' do
       before(:each) do
 
