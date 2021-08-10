@@ -58,5 +58,32 @@ RSpec.describe Invoice do
 
       expect(@invoice7.total_revenue).to eq(100)
     end
+
+    it 'return discounted invoice items' do
+      merchant = create(:merchant)
+      customer = create(:customer)
+      invoice = create(:invoice, customer: customer)
+      item1 = create(:item, merchant: merchant)
+      item2 = create(:item, merchant: merchant)
+      invoice_item1 = create(:invoice_item, quantity: 10, item: item1, invoice: invoice, status: 1)
+      invoice_item2 = create(:invoice_item, quantity: 20, item: item2, invoice: invoice, status: 1)
+      discount = merchant.discounts.create!(quantity_threshold: 15, percentage_discount: 10)
+
+      expect(invoice.discounted_invoice_items.length).to eq(1)
+      expect(invoice.discounted_invoice_items).to eq([invoice_item2])
+    end
+
+    it 'can return the revenue of discounted items' do
+      merchant = create(:merchant)
+      customer = create(:customer)
+      invoice = create(:invoice, customer: customer)
+      item1 = create(:item, merchant: merchant, unit_price: 1)
+      item2 = create(:item, merchant: merchant, unit_price: 2)
+      invoice_item1 = create(:invoice_item, quantity: 10, item: item1, invoice: invoice, status: 1)
+      invoice_item2 = create(:invoice_item, quantity: 20, item: item2, invoice: invoice, status: 1)
+      discount = merchant.discounts.create!(quantity_threshold: 15, percentage_discount: 10)
+
+      expect(invoice.discount_revenue).to eq(36)
+    end
   end
 end
