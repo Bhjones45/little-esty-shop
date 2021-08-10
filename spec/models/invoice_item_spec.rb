@@ -29,12 +29,41 @@ RSpec.describe InvoiceItem do
     it { should validate_presence_of(:unit_price) }
     it { should validate_presence_of(:quantity) }
 
-  describe 'class methods' do
-    describe '#total_revenue' do
-      it 'can calculate the total revenue on an invoice' do
-        expect(InvoiceItem.total_revenue).to eq(10000)
+    describe 'class methods' do
+      describe '#total_revenue' do
+        it 'can calculate the total revenue on an invoice' do
+          expect(InvoiceItem.total_revenue).to eq(10000)
+        end
+      end
+    end
+    describe 'instance methods' do
+      describe 'highest possible discount method' do
+        it 'can return the higest discount' do
+          merchant = create(:merchant)
+          customer = create(:customer)
+          invoice = create(:invoice, customer_id: customer.id, created_at: DateTime.new(2020,2,3,4,5,6))
+          item = create(:item, merchant: merchant)
+          discount1 = merchant.discounts.create(quantity_threshold: 5, percentage_discount: 10)
+          discount2 = merchant.discounts.create(quantity_threshold: 10, percentage_discount: 15)
+          discount3 = merchant.discounts.create(quantity_threshold: 15, percentage_discount: 20)
+          invoice_item = create(:invoice_item, item_id: item.id, status: 2, quantity: 12, unit_price: 10, invoice_id: invoice.id)
+
+          expect(invoice_item.highest_discount).to eq(discount2)
+        end
+
+        it 'can return highest discount percentage' do
+          merchant = create(:merchant)
+          customer = create(:customer)
+          invoice = create(:invoice, customer_id: customer.id, created_at: DateTime.new(2020,2,3,4,5,6))
+          item = create(:item, merchant: merchant)
+          discount1 = merchant.discounts.create(quantity_threshold: 5, percentage_discount: 10)
+          discount2 = merchant.discounts.create(quantity_threshold: 10, percentage_discount: 15)
+          discount3 = merchant.discounts.create(quantity_threshold: 15, percentage_discount: 20)
+          invoice_item = create(:invoice_item, item_id: item.id, status: 2, quantity: 12, unit_price: 10, invoice_id: invoice.id)
+
+          expect(invoice_item.percentage_highest_discount).to eq(discount2.percentage_discount)
+        end
       end
     end
   end
-end
 end
