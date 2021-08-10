@@ -58,6 +58,28 @@ RSpec.describe 'Admin Invoice Show Page' do
         expect(page).to have_content("Total Revenue: $#{(@invoice.total_revenue.to_f / 100)}")
       end
     end
+
+    it 'displays discounted total revenue' do
+      InvoiceItem.destroy_all
+      Item.destroy_all
+      Transaction.destroy_all
+      Invoice.destroy_all
+      Customer.destroy_all
+      Merchant.destroy_all
+
+      merchant = create(:merchant)
+      customer = create(:customer)
+      invoice = create(:invoice, customer: customer)
+      item1 = create(:item, merchant: merchant)
+      item2 = create(:item, merchant: merchant)
+      invoice_item1 = create(:invoice_item, quantity: 10, item: item1, invoice: invoice, status: 1)
+      invoice_item1 = create(:invoice_item, quantity: 20, item: item2, invoice: invoice, status: 1)
+      discount = merchant.discounts.create!(quantity_threshold: 15, percentage_discount: 10)
+
+      visit admin_invoice_path(invoice)
+      
+      expect(page).to have_content("Revenue after discounts applied: $#{invoice.discounted_total_revenue.to_f/100}")
+    end
   end
 
   describe 'Admin Invoice Show Page: Update Invoice Status' do
