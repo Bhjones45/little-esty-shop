@@ -21,7 +21,7 @@ class Invoice < ApplicationRecord
   def discounted_invoice_items
     invoice_items
       .joins(item: { merchant: :discounts})
-      .where('invoice_items.quantity > discounts.quantity_threshold')
+      .where('invoice_items.quantity >= discounts.quantity_threshold')
       .group(:id)
   end
 
