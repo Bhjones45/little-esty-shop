@@ -17,6 +17,9 @@
 <section id='totalrev'>
   <h1>Total Revenue: <%= number_to_currency(@invoice.total_revenue.to_f / 100) %></h1>
 </section>
+<section id='discountrev'>
+  <h1>Revenue after discounts applied: <%= number_to_currency(@invoice.discounted_total_revenue.to_f / 100) %></h1>
+</section>
 
 <section id='status'>
   <p>Invoice Status: <%= @invoice.status %></p>
