@@ -80,5 +80,51 @@ RSpec.describe 'Merchants invoices show page' do
 
       expect(page).to have_content("Revenue after discount was applied: $#{invoice.discounted_total_revenue/100}")
     end
+
+    it 'has link to discount show page' do
+      InvoiceItem.destroy_all
+      Item.destroy_all
+      Transaction.destroy_all
+      Invoice.destroy_all
+      Customer.destroy_all
+      Merchant.destroy_all
+
+      merchant = create(:merchant)
+      customer = create(:customer)
+      invoice = create(:invoice, customer: customer)
+      item1 = create(:item, merchant: merchant)
+      item2 = create(:item, merchant: merchant)
+      invoice_item1 = create(:invoice_item, quantity: 10, item: item1, invoice: invoice, status: 1)
+      invoice_item1 = create(:invoice_item, quantity: 20, item: item2, invoice: invoice, status: 1)
+      discount = merchant.discounts.create!(quantity_threshold: 15, percentage_discount: 10)
+
+      visit "/merchants/#{merchant.id}/invoices/#{invoice.id}"
+
+      expect(page).to have_link("10.0%")
+    end
+
+    it 'can link to invoice show page' do
+      InvoiceItem.destroy_all
+      Item.destroy_all
+      Transaction.destroy_all
+      Invoice.destroy_all
+      Customer.destroy_all
+      Merchant.destroy_all
+
+      merchant = create(:merchant)
+      customer = create(:customer)
+      invoice = create(:invoice, customer: customer)
+      item1 = create(:item, merchant: merchant)
+      item2 = create(:item, merchant: merchant)
+      invoice_item1 = create(:invoice_item, quantity: 10, item: item1, invoice: invoice, status: 1)
+      invoice_item1 = create(:invoice_item, quantity: 20, item: item2, invoice: invoice, status: 1)
+      discount = merchant.discounts.create!(quantity_threshold: 15, percentage_discount: 10)
+
+      visit "/merchants/#{merchant.id}/invoices/#{invoice.id}"
+
+      click_link "10.0%"
+
+      expect(current_path).to eq(merchant_discount_path(merchant, discount))
+    end
   end
 end
