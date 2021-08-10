@@ -10,4 +10,16 @@ class InvoiceItem < ApplicationRecord
   def self.total_revenue
     sum("invoice_items.unit_price * invoice_items.quantity")
   end
+
+  def revenue
+    quantity * unit_price
+  end
+
+  def highest_discount
+    item.merchant.discounts.highest_possible_discount(quantity)
+  end
+
+  def percentage_highest_discount
+    highest_discount.percentage_discount
+  end
 end

@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :items
     resources :invoices
     resources :invoice_items, only: [:update]
+    resources :discounts
   end
 
   resources :admin, only: [:index]

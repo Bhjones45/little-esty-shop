@@ -1,8 +1,8 @@
 <h1> Invoice #<%= @invoice.id %> </h1>
-<h3>Total Revenue: <%= number_to_currency(@invoice_items.total_revenue.to_f/100) %></h3>
-
+<h3>Total Revenue: <%= number_to_currency(@invoice.total_revenue.to_f/100) %></h3>
+<h3>Revenue after discount was applied: <%= number_to_currency(@invoice.discounted_total_revenue.to_f/100) %></h3>
 <b>For Customer: </b>
-<h2><%= @customer.first_name %> <%= @customer.last_name %></h2>
+<h4><%= @customer.first_name %> <%= @customer.last_name %></h4>
 <br><br>
 Status: <%= @invoice.status %><br>
 Date: <%= @invoice.created_at.strftime('%A %B %e, %Y') %>
@@ -13,6 +13,7 @@ Date: <%= @invoice.created_at.strftime('%A %B %e, %Y') %>
     <th>Item</th>
     <th>Quantity</th>
     <th>Unit Price</th>
+    <th>Discount</th>
     <th>Status</th>
   </tr>
     <% @invoice_items.each do |invoice_item| %>
@@ -20,6 +21,11 @@ Date: <%= @invoice.created_at.strftime('%A %B %e, %Y') %>
       <td><%= invoice_item.item.name %></td>
       <td><%= invoice_item.quantity %></td>
       <td><%= number_to_currency(invoice_item.unit_price.to_f/100) %></td>
+      <td>
+        <% if invoice_item.highest_discount %>
+          <%= link_to number_to_percentage(invoice_item.percentage_highest_discount, precision: 1), merchant_discount_path(@merchant, invoice_item.highest_discount) %>
+        <% end %>
+      </td>
       <td><%= form_with url: merchant_invoice_item_path(invoice_item.id), model: @invoice_item, method: :patch, local: true do |f| %>
         <%= f.select :status, ['pending', 'packaged', 'shipped'], :selected => invoice_item.status %>
         <%= f.hidden_field :id_for_merchant, :value => @merchant.id %>
