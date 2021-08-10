@@ -77,13 +77,26 @@ RSpec.describe Invoice do
       merchant = create(:merchant)
       customer = create(:customer)
       invoice = create(:invoice, customer: customer)
-      item1 = create(:item, merchant: merchant, unit_price: 1)
-      item2 = create(:item, merchant: merchant, unit_price: 2)
-      invoice_item1 = create(:invoice_item, quantity: 10, item: item1, invoice: invoice, status: 1)
-      invoice_item2 = create(:invoice_item, quantity: 20, item: item2, invoice: invoice, status: 1)
-      discount = merchant.discounts.create!(quantity_threshold: 15, percentage_discount: 10)
+      item1 = create(:item, merchant: merchant)
+      item2 = create(:item, merchant: merchant)
+      invoice_item1 = create(:invoice_item, quantity: 10, item: item1, invoice: invoice, status: 1, unit_price: 1)
+      invoice_item2 = create(:invoice_item, quantity: 20, item: item2, invoice: invoice, status: 1, unit_price: 2)
+      discount = merchant.discounts.create!(quantity_threshold: 15, percentage_discount: 10.0)
 
-      expect(invoice.discount_revenue).to eq(36)
+      expect(invoice.discount_revenue).to eq(4.0)
+    end
+
+    it 'can return revenue with discount applied' do
+      merchant = create(:merchant)
+      customer = create(:customer)
+      invoice = create(:invoice, customer: customer)
+      item1 = create(:item, merchant: merchant)
+      item2 = create(:item, merchant: merchant)
+      invoice_item1 = create(:invoice_item, quantity: 10, item: item1, invoice: invoice, status: 1, unit_price: 1)
+      invoice_item2 = create(:invoice_item, quantity: 20, item: item2, invoice: invoice, status: 1, unit_price: 2)
+      discount = merchant.discounts.create!(quantity_threshold: 15, percentage_discount: 10.0)
+
+      expect(invoice.discounted_total_revenue).to eq(46.0)
     end
   end
 end
