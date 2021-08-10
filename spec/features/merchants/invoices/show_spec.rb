@@ -77,8 +77,8 @@ RSpec.describe 'Merchants invoices show page' do
       discount = merchant.discounts.create!(quantity_threshold: 15, percentage_discount: 10)
 
       visit "/merchants/#{merchant.id}/invoices/#{invoice.id}"
-      
-      expect(page).to have_content("Revenue after discount was applied: $#{invoice.discounted_total_revenue}")
+
+      expect(page).to have_content("Revenue after discount was applied: $#{invoice.discounted_total_revenue/100}")
     end
   end
 end
