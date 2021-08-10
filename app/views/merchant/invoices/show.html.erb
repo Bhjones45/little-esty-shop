@@ -1,8 +1,8 @@
 <h1> Invoice #<%= @invoice.id %> </h1>
-<h3>Total Revenue: <%= number_to_currency(@invoice_items.total_revenue.to_f/100) %></h3>
-
+<h3>Total Revenue: <%= number_to_currency(@invoice.total_revenue.to_f/100) %></h3>
+<h3>Revenue after discount was applied: <%= number_to_currency(@invoice.discounted_total_revenue/100) %></h3>
 <b>For Customer: </b>
-<h2><%= @customer.first_name %> <%= @customer.last_name %></h2>
+<h4><%= @customer.first_name %> <%= @customer.last_name %></h4>
 <br><br>
 Status: <%= @invoice.status %><br>
 Date: <%= @invoice.created_at.strftime('%A %B %e, %Y') %>
