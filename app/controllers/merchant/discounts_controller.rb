@@ -11,7 +11,7 @@ class Merchant::DiscountsController < ApplicationController
 
   def create
     merchant = Merchant.find(params[:merchant_id])
-    discount = merchant.discounts.create(discount_params)
+    discount = merchant.discounts.create!(discount_params)
 
     redirect_to merchant_discounts_path(merchant)
   end

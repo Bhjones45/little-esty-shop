@@ -13,6 +13,7 @@ Date: <%= @invoice.created_at.strftime('%A %B %e, %Y') %>
     <th>Item</th>
     <th>Quantity</th>
     <th>Unit Price</th>
+    <th>Discount</th>
     <th>Status</th>
   </tr>
     <% @invoice_items.each do |invoice_item| %>
