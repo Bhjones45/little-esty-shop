@@ -123,7 +123,6 @@ RSpec.describe 'Merchants invoices show page' do
       visit "/merchants/#{merchant.id}/invoices/#{invoice.id}"
 
       click_link "10.0%"
-
       expect(current_path).to eq(merchant_discount_path(merchant, discount))
     end
   end

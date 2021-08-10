@@ -13,10 +13,10 @@ RSpec.describe Discount do
         discount2 = merchant.discounts.create(quantity_threshold: 10, percentage_discount: 15)
         discount3 = merchant.discounts.create(quantity_threshold: 15, percentage_discount: 20)
 
-        expect(Discount.highest_discount(1)).to eq(nil)
-        expect(Discount.highest_discount(7)).to eq(discount1)
-        expect(Discount.highest_discount(12)).to eq(discount2)
-        expect(Discount.highest_discount(18)).to eq(discount3)
+        expect(Discount.highest_possible_discount(1)).to eq(nil)
+        expect(Discount.highest_possible_discount(7)).to eq(discount1)
+        expect(Discount.highest_possible_discount(12)).to eq(discount2)
+        expect(Discount.highest_possible_discount(18)).to eq(discount3)
       end
     end
   end
